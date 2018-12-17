@@ -106,26 +106,24 @@ svm_solution.to_csv("SVM.csv", index_label=["PassengerId"])
 corr = train.corr()**2
 print(corr["Survived"].sort_values(ascending=False))
 
-'''
-Show PCA
-principalDf = pd.DataFrame(data = pca_test
-             , columns = ['principal component 1', 'principal component 2'])
+
+#Show PCA
+principalDf = pd.DataFrame(data=pca_test, columns=['principal component 1', 'principal component 2'])
 principalDf["Survived"] = svc_pred
-fig = plt.figure(figsize = (8,8))
-ax = fig.add_subplot(1,1,1)
+fig = plt.figure(figsize=(8, 8))
+ax = fig.add_subplot(1, 1, 1)
 ax.set_xlabel('Principal Component 1', fontsize = 15)
 ax.set_ylabel('Principal Component 2', fontsize = 15)
 ax.set_title('2 component PCA', fontsize = 20)
 
 targets = [0, 1]
-colors = ['r', 'g', 'b']
-for target, color in zip(targets,colors):
+colors = ['r', 'g']
+for target, color in zip(targets, colors):
     indicesToKeep = principalDf["Survived"] == target
     ax.scatter(principalDf.loc[indicesToKeep, 'principal component 1']
                , principalDf.loc[indicesToKeep, 'principal component 2']
-               , c = color
-               , s = 50)
+               , c=color
+               , s=50)
 ax.legend(targets)
 ax.grid()
 plt.show()
-'''
