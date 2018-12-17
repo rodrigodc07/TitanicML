@@ -20,26 +20,31 @@ test["Fare"] = test["Fare"].fillna(test["Fare"].median())
 # Convert the male and female groups to integer form
 train.loc[train["Sex"] == "male", "Sex"] = 0
 train.loc[train["Sex"] == "female", "Sex"] = 1
+
 # Impute the Embarked variable
 train["Embarked"] = train["Embarked"].fillna("S")
+
 # Convert the Embarked classes to integer form
 train.loc[train["Embarked"] == "S", "Embarked"] = 0
 train.loc[train["Embarked"] == "C", "Embarked"] = 1
 train.loc[train["Embarked"] == "Q", "Embarked"] = 2
+
 # Convert the male and female groups to integer form on test
 test.loc[test["Sex"] == "male", "Sex"] = 0
 test.loc[test["Sex"] == "female", "Sex"] = 1
+
 # Convert the Embarked classes to integer form ontes
 test.loc[test["Embarked"] == "S", "Embarked"] = 0
 test.loc[test["Embarked"] == "C", "Embarked"] = 1
 test.loc[test["Embarked"] == "Q", "Embarked"] = 2
 
-train.drop(['Name', 'Ticket'],axis=1, inplace=True)
-test.drop(['Name', 'Ticket'],axis=1, inplace=True)
+train.drop(['Name', 'Ticket'], axis=1, inplace=True)
+test.drop(['Name', 'Ticket'], axis=1, inplace=True)
 train.drop(labels=["Cabin"], axis=1, inplace=True)
-test.drop(labels = ['Cabin'], axis=1, inplace=True)
+test.drop(labels=['Cabin'], axis=1, inplace=True)
 
-'''Complete Age
+'''
+Complete Age
 age_train = KNN(k=10).complete(train)
 age_test = KNN(k=10).complete(test)
 train = pd.DataFrame(age_train, columns = train.columns)
@@ -76,9 +81,9 @@ print(my_forest.feature_importances_)
 
 # Add PassengerId to Survived as a column
 PassengerId = np.array(test["PassengerId"]).astype(int)
-my_solution = pd.DataFrame(pred_forest, PassengerId, columns=["Survived"])
+forest_solution = pd.DataFrame(pred_forest, PassengerId, columns=["Survived"])
 # Write your solution to a csv file with the name my_solution.csv
-my_solution.to_csv("forest_solution.csv", index_label=["PassengerId"])
+forest_solution.to_csv("forest_solution.csv", index_label=["PassengerId"])
 
 
 #PCA to visualization
@@ -94,9 +99,9 @@ print(svc.score(pca_train, target))
 
 # Add PassengerId to Survived as a column
 PassengerId = np.array(test["PassengerId"]).astype(int)
-my_solution = pd.DataFrame(svc_pred, PassengerId, columns=["Survived"])
+svm_solution = pd.DataFrame(svc_pred, PassengerId, columns=["Survived"])
 # Write your solution to a csv file with the name my_solution.csv
-my_solution.to_csv("SVM&PCA_solution.csv", index_label=["PassengerId"])
+svm_solution.to_csv("SVM.csv", index_label=["PassengerId"])
 
 corr = train.corr()**2
 print(corr["Survived"].sort_values(ascending=False))
