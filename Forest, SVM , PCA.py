@@ -51,18 +51,18 @@ train = pd.DataFrame(age_train, columns = train.columns)
 test = pd.DataFrame(age_test, columns = test.columns)
 '''
 
-# Create the target and features numpy arrays: target, features_one
+# Create the target and features numpy arrays: target
 target = train["Survived"].values
 
-# Select the Pclass, Age, Sex, Fare,Embarked and isAlone variables
-train["family_size"] = train["SibSp"] + train["Parch"] + 1
-test["family_size"] = test["SibSp"] + test["Parch"] + 1
-train["isAlone"] = 0
-test["isAlone"] = 0
-train.loc[train["family_size"] == 1, "isAlone"] = 1
-test.loc[test["family_size"] == 1, "isAlone"] = 1
-train_features = train[["Pclass", "Age", "Sex", "Fare", "Embarked", "isAlone"]].values
-test_features = test[["Pclass", "Age", "Sex", "Fare", "Embarked", "isAlone"]].values
+# Select the Pclass, Age, Sex, Fare,Embarked and IsAlone variables
+train["FamilySize"] = train["SibSp"] + train["Parch"] + 1
+test["FamilySize"] = test["SibSp"] + test["Parch"] + 1
+train["IsAlone"] = 0
+test["IsAlone"] = 0
+train.loc[train["FamilySize"] == 1, "IsAlone"] = 1
+test.loc[test["FamilySize"] == 1, "IsAlone"] = 1
+train_features = train[["Pclass", "Age", "Sex", "Fare", "Embarked", "IsAlone"]].values
+test_features = test[["Pclass", "Age", "Sex", "Fare", "Embarked", "IsAlone"]].values
 
 # Scaling
 test_features = StandardScaler().fit_transform(test_features)

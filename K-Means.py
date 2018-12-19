@@ -39,15 +39,15 @@ test.drop(['Name', 'Ticket'], axis=1, inplace=True)
 train.drop(labels=["Cabin"], axis=1, inplace=True)
 test.drop(labels=['Cabin'], axis=1, inplace=True)
 
-train["family_size"] = train["SibSp"] + train["Parch"] + 1
-test["family_size"] = test["SibSp"] + test["Parch"] + 1
-train["isAlone"] = 0
-test["isAlone"] = 0
-train.loc[train["family_size"] == 1, "isAlone"] = 1
-test.loc[test["family_size"] == 1, "isAlone"] = 1
+train["FamilySize"] = train["SibSp"] + train["Parch"] + 1
+test["FamilySize"] = test["SibSp"] + test["Parch"] + 1
+train["IsAlone"] = 0
+test["IsAlone"] = 0
+train.loc[train["FamilySize"] == 1, "IsAlone"] = 1
+test.loc[test["FamilySize"] == 1, "IsAlone"] = 1
 
-X_train = train[["Pclass", "Age", "Sex", "Fare", "Embarked", "isAlone"]].values
-X_test = test[["Pclass", "Age", "Sex", "Fare", "Embarked", "isAlone"]].values
+X_train = train[["Pclass", "Age", "Sex", "Fare", "Embarked", "IsAlone"]].values
+X_test = test[["Pclass", "Age", "Sex", "Fare", "Embarked", "IsAlone"]].values
 
 X_train = preprocessing.scale(X_train)
 X_test = preprocessing.scale(X_test)
