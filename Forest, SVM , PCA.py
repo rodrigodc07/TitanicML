@@ -54,7 +54,7 @@ test = pd.DataFrame(age_test, columns = test.columns)
 # Create the target and features numpy arrays: target, features_one
 target = train["Survived"].values
 
-# We want the Pclass, Age, Sex, Fare,SibSp, Parch, and Embarked variables
+# Select the Pclass, Age, Sex, Fare,Embarked and isAlone variables
 train["family_size"] = train["SibSp"] + train["Parch"] + 1
 test["family_size"] = test["SibSp"] + test["Parch"] + 1
 train["isAlone"] = 0
@@ -72,21 +72,17 @@ train_features = StandardScaler().fit_transform(train_features)
 forest = RandomForestClassifier(max_depth=10, min_samples_split=2, n_estimators=100, random_state=1)
 my_forest = forest.fit(train_features, target)
 
-# Print the score of the fitted random forest
-print(my_forest.score(train_features, target))
-
-# Compute predictions on our test set features then print the feature_importances_
+# Create the prediction of the forest
 pred_forest = my_forest.predict(test_features)
-print(my_forest.feature_importances_)
 
 # Add PassengerId to Survived as a column
 PassengerId = np.array(test["PassengerId"]).astype(int)
 forest_solution = pd.DataFrame(pred_forest, PassengerId, columns=["Survived"])
-# Write your solution to a csv file with the name my_solution.csv
+
+# Write solution to a csv file
 forest_solution.to_csv("forest_solution.csv", index_label=["PassengerId"])
 
-
-#PCA to visualization
+# PCA to visualization
 from sklearn.decomposition import PCA
 pca = PCA(n_components=2)
 pca_test = pca.fit_transform(test_features)
@@ -106,8 +102,7 @@ svm_solution.to_csv("SVM.csv", index_label=["PassengerId"])
 corr = train.corr()**2
 print(corr["Survived"].sort_values(ascending=False))
 
-
-#Show PCA
+# Show PCA
 principalDf = pd.DataFrame(data=pca_test, columns=['principal component 1', 'principal component 2'])
 principalDf["Survived"] = svc_pred
 fig = plt.figure(figsize=(8, 8))

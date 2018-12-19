@@ -1,4 +1,4 @@
-# data analysis and wrangling
+# Show graphs to each feature
 import pandas as pd
 # Import the Numpy library
 import numpy as np
@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 # Read csv
 train = pd.read_csv("input/train.csv")
 test = pd.read_csv("input/test.csv")
+test_target = pd.read_csv("input/gender_submission.csv")
 
 # Complete Values
 train["Age"] = train["Age"].fillna(train["Age"].median())
@@ -36,7 +37,7 @@ test.loc[test["Embarked"] == "Q", "Embarked"] = 2
 train.drop(['Name', 'Ticket'], axis=1, inplace=True)
 test.drop(['Name', 'Ticket'], axis=1, inplace=True)
 train.drop(labels=["Cabin"], axis=1, inplace=True)
-test.drop(labels = ['Cabin'], axis=1, inplace=True)
+test.drop(labels=['Cabin'], axis=1, inplace=True)
 
 train["family_size"] = train["SibSp"] + train["Parch"] + 1
 test["family_size"] = test["SibSp"] + test["Parch"] + 1
@@ -50,14 +51,11 @@ X_test = test[["Pclass", "Age", "Sex", "Fare", "Embarked", "isAlone"]].values
 
 X_train = preprocessing.scale(X_train)
 X_test = preprocessing.scale(X_test)
-y = np.array(train["Survived"])
+y = np.array(test_target["Survived"])
 
-'''
-print(y.describe())
-print(X.describe())
-'''
 # PCA on data
 from sklearn.decomposition import PCA
+
 pca = PCA(n_components=2)
 X_train = pca.fit_transform(X_train)
 X_test = pca.transform(X_test)
@@ -68,51 +66,19 @@ clf.fit(X_train)
 clf_pred = clf.predict(X_test)
 correct = 0
 
-#Verifica a % de acertos
+# Calculate Score
 
 for i in range(len(clf_pred)):
-    if clf_pred[i]==y[i]:
-        correct+=1
-print(max(1 - correct / len(X_train), correct / len(X_train)))
+    if clf_pred[i] == y[i]:
+        correct += 1
 
-clf_pred = clf.predict(X_test)
+print(max(1 - correct / len(clf_pred), correct / len(clf_pred)))
+
 PassengerId = np.array(test["PassengerId"]).astype(int)
-
 my_solution = pd.DataFrame(clf_pred, PassengerId, columns=["Survived"])
 # Write your solution to a csv file with the name my_solution.csv
 my_solution.to_csv("KMeans.csv", index_label=["PassengerId"])
 
-for i in range(len(clf_pred)) :
-    if clf_pred[i] == 1:
-        clf_pred[i] = 0
-    else:
-        clf_pred[i] = 1
-my_solution = pd.DataFrame(clf_pred, PassengerId, columns=["Survived"])
-# Write your solution to a csv file with the name my_solution.csv
-my_solution.to_csv("KMeans_inv.csv", index_label=["PassengerId"])
-
-'''
-Plot Data
-principalDf = pd.DataFrame(data = X_test
-             , columns = ['principal component 1', 'principal component 2'])
-principalDf["Survived"] = clf_pred
-fig = plt.figure(figsize = (8,8))
-ax = fig.add_subplot(1,1,1)
-ax.set_xlabel('Principal Component 1', fontsize = 15)
-ax.set_ylabel('Principal Component 2', fontsize = 15)
-ax.set_title('2 component PCA', fontsize = 20)
-
-targets = [0, 1]
-colors = ['r', 'g', 'b']
-for target, color in zip(targets,colors):
-    indicesToKeep = principalDf["Survived"] == target
-    ax.scatter(principalDf.loc[indicesToKeep, 'principal component 1']
-               , principalDf.loc[indicesToKeep, 'principal component 2']
-               , c = color
-               , s = 50)
-ax.legend(targets)
-ax.grid()
-plt.show()
 '''
 columns = train.keys().tolist()
 for i in columns:
@@ -135,3 +101,4 @@ for i in columns:
     plt.title(i)
     plt.legend()
     plt.show()
+'''
