@@ -110,8 +110,8 @@ my_tree_four = my_tree_four.fit(features_four, target)
 print(my_tree_four.score(features_four, target))
 
 # Make your prediction using the test set
-my_prediction3 = my_tree_four.predict(test_features_four)
+my_prediction4 = my_tree_four.predict(test_features_four)
 # Create a data frame with two columns: PassengerId & Survived. Survived contains your predictions
 PassengerId = np.array(test["PassengerId"]).astype(int)
-my_solution3 = pd.DataFrame(my_prediction3, PassengerId, columns=["Survived"])
-my_solution3.to_csv("my_solution3.csv", index_label=["PassengerId"])
+my_solution4 = pd.DataFrame(my_prediction3, PassengerId, columns=["Survived"])
+my_solution4.to_csv("my_solution4.csv", index_label=["PassengerId"])
