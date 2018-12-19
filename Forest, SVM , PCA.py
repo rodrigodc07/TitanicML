@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 # Read csv
 train = pd.read_csv("input/train.csv")
 test = pd.read_csv("input/test.csv")
+test_target = pd.read_csv("input/gender_submission.csv")
 
 # Complete Values
 train["Age"] = train["Age"].fillna(train["Age"].median())
@@ -51,8 +52,9 @@ train = pd.DataFrame(age_train, columns = train.columns)
 test = pd.DataFrame(age_test, columns = test.columns)
 '''
 
-# Create the target and features numpy arrays: target
+# Create the target and features numpy arrays: target, test_target
 target = train["Survived"].values
+test_target = test_target["Survived"].values
 
 # Select the Pclass, Age, Sex, Fare,Embarked and IsAlone variables
 train["FamilySize"] = train["SibSp"] + train["Parch"] + 1
@@ -75,6 +77,8 @@ my_forest = forest.fit(train_features, target)
 # Create the prediction of the forest
 pred_forest = my_forest.predict(test_features)
 
+print(my_forest.score(test_features, test_target))
+
 # Add PassengerId to Survived as a column
 PassengerId = np.array(test["PassengerId"]).astype(int)
 forest_solution = pd.DataFrame(pred_forest, PassengerId, columns=["Survived"])
@@ -91,16 +95,13 @@ pca_train = pca.transform(train_features)
 svc = SVC()
 svc.fit(pca_train, target)
 svc_pred = svc.predict(pca_test)
-print(svc.score(pca_train, target))
+print(svc.score(pca_test, test_target))
 
 # Add PassengerId to Survived as a column
 PassengerId = np.array(test["PassengerId"]).astype(int)
 svm_solution = pd.DataFrame(svc_pred, PassengerId, columns=["Survived"])
 # Write your solution to a csv file with the name my_solution.csv
 svm_solution.to_csv("SVM.csv", index_label=["PassengerId"])
-
-corr = train.corr()**2
-print(corr["Survived"].sort_values(ascending=False))
 
 # Show PCA
 principalDf = pd.DataFrame(data=pca_test, columns=['principal component 1', 'principal component 2'])
